@@ -12,7 +12,9 @@ trainSVM: imgSVM.o
 	${CC} -o trainSVM *.o trainSVM.cpp ${CXXFLAGS} ${LDFLAGS}
 #  use *.o to link with all .o files, otherwise will ignore all .o files
 
-imgSVM.o: imgSVM.hpp
+global.o: global.hpp
+
+imgSVM.o: imgSVM.hpp global.o
 
 clean: 
 	rm -f trainSVM *.o

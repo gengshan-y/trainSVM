@@ -5,12 +5,16 @@ using namespace std;
 using namespace cv;
 
 int main(int argc, char* argv[]) {
-  if (argc != 2) {
-    cout << "Usage: ./trainSVM another-argument" << endl;
+  if (argc != 3) {
+    cout << "Usage: ./trainSVM path-to-positive path-to-negative" << endl;
+    exit(-1);
   }
 
   // Creating SVM
   imgSVM testImgSVM;
+
+  // Read images
+  testImgSVM.path2feat(argv[1]); 
 
   // Parse data to classfier
   testImgSVM.Mat2samp();

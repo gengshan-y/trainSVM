@@ -4,7 +4,8 @@ using namespace std;
 using namespace cv;
 
 void imgSVM::showInfo() {
-  cout << "params:" << endl;
+  cout << "feature size:\t" << featSize << endl;
+  cout << "SVM params:" << endl;
   cout << "svm_type:\t" << params.svm_type << endl;
   cout << "kernel_type:\t" << params.kernel_type << endl;
   cout << "degree:\t" << params.degree << endl;
@@ -40,4 +41,36 @@ void imgSVM::SVMTrain() {
 
 float imgSVM::SVMPredict(Mat sampleMat) {
   return SVM.predict(sampleMat);
+}
+
+void imgSVM::path2feat(char* imgListPath) {
+  /* Open image list file */  
+  ifstream imgListFile(imgListPath, ios::binary);
+  if (!imgListFile.is_open()) {
+    cout << "image list open failed." << endl;
+    exit(-1);
+  }
+  imgListFile.seekg(0, ios_base::beg);
+
+  /* Load image and perform transformation */
+  string imgPath;
+  while (getline(imgListFile, imgPath)) {
+    Mat img = imread(imgPath, CV_LOAD_IMAGE_COLOR);
+    // imshow("", img);
+    // waitKey(0);
+
+    /* Compute HOG feature */
+    resize(img, img, Size(64, 64));
+    HOGDescriptor HOG(winSize, blockSize, blockStride, cellSize, nbins);
+    vector<float> feat;  // temp 1764 dim vector
+    Mat featMat(1, featSize, CV_32FC1);  // temp mat
+
+    HOG.compute(img, feat, winStride);
+    for (unsigned int it = 0; it < feat.size(); it++) {
+      featMat.at<float>(0, it) = feat[it];
+    }
+    trainingPos.push_back(featMat);
+  }
+   cout << trainingPos.size() << endl; 
+  exit(-1);
 }
