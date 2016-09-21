@@ -5,8 +5,9 @@ using namespace std;
 using namespace cv;
 
 int main(int argc, char* argv[]) {
-  if (argc != 3) {
-    cout << "Usage: ./trainSVM path-to-positive path-to-negative" << endl;
+  if (argc != 5) {
+    cout << "Usage: ./trainSVM path-to-train-positive path-to-train-negative" 
+         << " path-to-val-positive path-to-val-negative" << endl;
     exit(-1);
   }
 
@@ -14,10 +15,13 @@ int main(int argc, char* argv[]) {
   imgSVM testImgSVM;
 
   // Read images
-  testImgSVM.path2feat(argv[1]); 
-
+  Mat trainPos = testImgSVM.path2feat(argv[1]);
+  Mat trainNeg = testImgSVM.path2feat(argv[2]);
+  Mat valPos = testImgSVM.path2feat(argv[3]);
+  Mat valNeg = testImgSVM.path2feat(argv[4]);
+  
   // Parse data to classfier
-  testImgSVM.Mat2samp();
+  testImgSVM.fillData(trainPos, trainNeg);
 
   // Configure parameters
   testImgSVM.SVMConfig();
@@ -26,12 +30,14 @@ int main(int argc, char* argv[]) {
   testImgSVM.SVMTrain();
 
   // Test SVM
-  for (int i = 0; i < 5; ++i)
-    for (int j = 0; j < 5; ++j)
-    {
-      Mat sampleMat = (Mat_<float>(1,2) << i,j);
-      float response = testImgSVM.SVMPredict(sampleMat);
-    }
+  Mat res;
+  testImgSVM.SVMPredict(valPos, res);
+  cout << res.rows << endl;
+  cout << res << endl;
+
+  testImgSVM.SVMPredict(valNeg, res);
+  cout << res.rows << endl;
+  cout << res << endl; 
 
   return 0;
 }

@@ -13,14 +13,21 @@ using namespace cv;
 class imgSVM {
  public:
   /* Constructor */
-  imgSVM() : featSize(1764), trainingPos(0, 1764, CV_32FC1){
+  imgSVM() : featSize(1764), trainDataMat(0, 1764, CV_32FC1),
+             labelsMat(0, 1, CV_32FC1){
   }
   
   /* Show basic information of SVM classifier */
   void showInfo();
 
+  /* Read images to a vector of mats */
+  vector<Mat> path2img(char* imgListPath);
+
+  /* From a vector of image mats to features */
+  Mat img2feat(vector<Mat> imgVec);
+
   /* Read images in the list and compute features */
-  void path2feat(char* imgListPath);
+  Mat path2feat(char* imgListPath);
 
   /* Parse Mat into training sample */
   void Mat2samp();
@@ -32,16 +39,20 @@ class imgSVM {
   void SVMTrain();
 
   /* Predicing label */
-  float SVMPredict(Mat sampleMat);
+  void SVMPredict(Mat sampleMat, Mat& res);
+
+  /* Fill training data */
+  void fillData(Mat trainPos, Mat trainNeg);
+
+  /* Get feature size of the classifier */
+  unsigned int getFeatSize();
 
  private:
   CvSVM SVM;
   CvSVMParams params;
-  Mat trainingDataMat;
-  Mat labelsMat;
-  Mat trainingPos;
-  Mat trainingNeg;
   unsigned int featSize;
+  Mat trainDataMat;
+  Mat labelsMat;
 };
 
 #endif  // IMG_SVM

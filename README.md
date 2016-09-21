@@ -4,8 +4,8 @@
 
 - generate training sample lists  
 
-`./listGen.sh /data/gengshan/train/pos/ /data/gengshan/train/neg/`
+`./listGen.sh /data/gengshan/train/pos/ /data/gengshan/train/neg/ /data/gengshan/val/pos/ /data/gengshan/val/neg/`
 
 - make
 
-- ./trainSVM listPos.txt listNeg.txt 
+- ./trainSVM data/listPosTrain.txt data/listNegTrain.txt data/listPosVal.txt data/listNegVal.txt
