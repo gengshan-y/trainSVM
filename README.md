@@ -1,5 +1,9 @@
 # trainSVM
 
+Code to train a off-line head detector with OpenCV HOG+SVM method.
+
+## Usage
+
 - `cd trainSVM`
 
 - generate training sample lists  
