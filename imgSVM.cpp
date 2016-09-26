@@ -31,8 +31,9 @@ void imgSVM::Mat2samp() {
 
 void imgSVM::SVMConfig() {
   params.svm_type    = CvSVM::C_SVC;
+  params.C = 0.1;
   params.kernel_type = CvSVM::LINEAR;
-  params.term_crit   = cvTermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
+  params.term_crit   = cvTermCriteria(CV_TERMCRIT_ITER, 10000, FLT_EPSILON);
   showInfo(); 
 }
 

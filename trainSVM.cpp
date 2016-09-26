@@ -32,12 +32,22 @@ int main(int argc, char* argv[]) {
   // Test SVM
   Mat res;
   testImgSVM.SVMPredict(valPos, res);
-  cout << res.rows << endl;
-  cout << res << endl;
+  unsigned int accum = 0;
+  for (int it = 0; it < res.rows; it++) {
+    if (res.at<float>(it, 0) > 0) {
+      accum++;
+    }
+  }
+  cout << "pos accuracy:\t" << float(accum)/res.rows << endl;
 
+  accum = 0;
   testImgSVM.SVMPredict(valNeg, res);
-  cout << res.rows << endl;
-  cout << res << endl; 
+  for (int it = 0; it < res.rows; it++) {
+    if (res.at<float>(it, 0) < 0) {
+      accum++;
+    }
+  }
+  cout << "neg accuracy:\t" << float(accum)/res.rows << endl;
 
   return 0;
 }
