@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
   Mat valNeg = testImgSVM.path2feat(argv[4]);
   
   // Parse data to classfier
-  testImgSVM.fillData(trainPos.row(0), trainNeg.row(0));
+  testImgSVM.fillData(trainPos, trainNeg);
 
   // Configure parameters
   testImgSVM.SVMConfig();
@@ -31,8 +31,7 @@ int main(int argc, char* argv[]) {
 
   // Test SVM
   Mat res;
-  // testImgSVM.SVMPredict(valPos, res);
-  testImgSVM.SVMPredict(trainPos.row(0), res);
+  testImgSVM.SVMPredict(valPos, res);
   unsigned int accum = 0;
   for (int it = 0; it < res.rows; it++) {
     if (res.at<float>(it, 0) > 0) {
@@ -42,8 +41,7 @@ int main(int argc, char* argv[]) {
   cout << "pos accuracy:\t" << float(accum)/res.rows << endl;
 
   accum = 0;
-  // testImgSVM.SVMPredict(valNeg, res);
-  testImgSVM.SVMPredict(trainNeg.row(0), res);
+  testImgSVM.SVMPredict(valNeg, res);
   for (int it = 0; it < res.rows; it++) {
     if (res.at<float>(it, 0) < 0) {
       accum++;
